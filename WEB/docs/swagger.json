@@ -1,0 +1,783 @@
+{
+	"openapi": "3.0.3",
+	"info": {
+		"title": "Projet BigDataIAWeb Tree API",
+		"version": "1.0.0",
+		"description": "API specification for the tree database and the shared Python model inference path. All Python CLI-based predictions are exposed through the same endpoint and selected by the `model` field."
+	},
+	"servers": [
+		{
+			"url": "/api",
+			"description": "Base API path"
+		}
+	],
+	"tags": [
+		{
+			"name": "Predictions",
+			"description": "Shared inference endpoint for the Python CLI models"
+		},
+		{
+			"name": "Trees",
+			"description": "Tree registry operations"
+		},
+		{
+			"name": "Reference Data",
+			"description": "Lookup tables used by the tree schema"
+		}
+	],
+	"paths": {
+		"/predictions": {
+			"post": {
+				"tags": ["Predictions"],
+				"summary": "Run a model prediction",
+				"description": "Single shared endpoint for all model-backed features. Use `model` to select `height_classification`, `age_prediction`, or `storm_prevention`.",
+				"operationId": "createPrediction",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PredictionRequest"
+							},
+							"examples": {
+								"heightClassification": {
+									"summary": "Cluster prediction",
+									"value": {
+										"model": "height_classification",
+										"num_clusters": 2,
+										"haut_tot": 15,
+										"tronc_diam": 130,
+										"age_estim": 45,
+										"fk_stadedev_encoded": 0.0
+									}
+								},
+								"agePrediction": {
+									"summary": "Age estimation",
+									"value": {
+										"model": "age_prediction",
+										"haut_tronc": 2.5,
+										"haut_tot": 15.0,
+										"tronc_diam": 45.0,
+										"species": "QUE-ROB"
+									}
+								},
+								"stormPrevention": {
+									"summary": "Storm risk classification",
+									"value": {
+										"model": "storm_prevention",
+										"haut_tronc": 2.5,
+										"haut_tot": 15.0,
+										"tronc_diam": 45.0,
+										"clc_nbr_diag": 0
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Prediction succeeded",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PredictionResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid input payload",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Model loading or execution error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/especes": {
+			"get": {
+				"tags": ["Reference Data"],
+				"summary": "List species",
+				"operationId": "listEspeces",
+				"responses": {
+					"200": {
+						"description": "Species list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Espece"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/especes/{id_espece}": {
+			"get": {
+				"tags": ["Reference Data"],
+				"summary": "Get a species by ID",
+				"operationId": "getEspeceById",
+				"parameters": [
+					{
+						"name": "id_espece",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Species record",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Espece"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Species not found"
+					}
+				}
+			}
+		},
+		"/etats": {
+			"get": {
+				"tags": ["Reference Data"],
+				"summary": "List tree states",
+				"operationId": "listEtats",
+				"responses": {
+					"200": {
+						"description": "Tree states list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Etat"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/stades-developpement": {
+			"get": {
+				"tags": ["Reference Data"],
+				"summary": "List development stages",
+				"operationId": "listStadesDeveloppement",
+				"responses": {
+					"200": {
+						"description": "Development stages list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/StadeDeveloppement"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/types-port": {
+			"get": {
+				"tags": ["Reference Data"],
+				"summary": "List port types",
+				"operationId": "listTypesPort",
+				"responses": {
+					"200": {
+						"description": "Port types list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/TypePort"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/types-pied": {
+			"get": {
+				"tags": ["Reference Data"],
+				"summary": "List pied types",
+				"operationId": "listTypesPied",
+				"responses": {
+					"200": {
+						"description": "Pied types list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/TypePied"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/arbres": {
+			"get": {
+				"tags": ["Trees"],
+				"summary": "List trees",
+				"operationId": "listArbres",
+				"responses": {
+					"200": {
+						"description": "Tree list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Arbre"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Trees"],
+				"summary": "Create a tree record",
+				"operationId": "createArbre",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ArbreCreateRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Tree created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Arbre"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/arbres/{id_arbre}": {
+			"get": {
+				"tags": ["Trees"],
+				"summary": "Get a tree by ID",
+				"operationId": "getArbreById",
+				"parameters": [
+					{
+						"name": "id_arbre",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Tree record",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Arbre"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Tree not found"
+					}
+				}
+			},
+			"patch": {
+				"tags": ["Trees"],
+				"summary": "Update a tree record",
+				"operationId": "updateArbre",
+				"parameters": [
+					{
+						"name": "id_arbre",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ArbreUpdateRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Tree updated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Arbre"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Trees"],
+				"summary": "Delete a tree record",
+				"operationId": "deleteArbre",
+				"parameters": [
+					{
+						"name": "id_arbre",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "Tree deleted"
+					},
+					"404": {
+						"description": "Tree not found"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"PredictionRequest": {
+				"type": "object",
+				"required": ["model"],
+				"properties": {
+					"model": {
+						"type": "string",
+						"enum": ["height_classification", "age_prediction", "storm_prevention", "besoin_client_1", "besoin_client_2", "besoin_client_3"],
+						"description": "Selects the model to run. The besoin_client_* aliases are kept for backward compatibility."
+					},
+					"num_clusters": {
+						"type": "integer",
+						"minimum": 2,
+						"maximum": 3,
+						"description": "Required for height classification."
+					},
+					"haut_tot": {
+						"type": "number",
+						"format": "float",
+						"description": "Tree total height. Maps to `hauteur_totale` in the database schema."
+					},
+					"tronc_diam": {
+						"type": "number",
+						"format": "float",
+						"description": "Trunk diameter. Maps to `diametre_tronc` in the database schema."
+					},
+					"age_estim": {
+						"type": "number",
+						"format": "float",
+						"description": "Estimated age used by the height classification model."
+					},
+					"fk_stadedev_encoded": {
+						"type": "number",
+						"format": "float",
+						"description": "Encoded development stage used by the height classification model. Derived from `stades_developpement`."
+					},
+					"haut_tronc": {
+						"type": "number",
+						"format": "float",
+						"description": "Tree trunk height. Maps to `hauteur_tronc` in the database schema."
+					},
+					"species": {
+						"type": "string",
+						"description": "Optional species code or common name used by the age prediction model. Can map to `especes.nom_code` or `especes.nom_commun`."
+					},
+					"clc_nbr_diag": {
+						"type": "number",
+						"format": "float",
+						"description": "Number of tree diagnostics used by the storm prevention model."
+					},
+					"client": {
+						"type": "string",
+						"description": "Optional alias for model selection."
+					}
+				},
+				"oneOf": [
+					{
+						"required": ["model", "num_clusters", "haut_tot", "tronc_diam", "age_estim", "fk_stadedev_encoded"]
+					},
+					{
+						"required": ["model", "haut_tronc", "haut_tot", "tronc_diam"]
+					},
+					{
+						"required": ["model", "haut_tronc", "haut_tot", "tronc_diam", "clc_nbr_diag"]
+					}
+				]
+			},
+			"PredictionResponse": {
+				"type": "object",
+				"required": ["ok", "client", "result"],
+				"properties": {
+					"ok": {
+						"type": "boolean",
+						"example": true
+					},
+					"client": {
+						"type": "string",
+						"enum": ["height_classification", "age_prediction", "storm_prevention", "besoin_client_1", "besoin_client_2", "besoin_client_3"]
+					},
+					"input": {
+						"type": "object",
+						"additionalProperties": true
+					},
+					"result": {
+						"oneOf": [
+							{
+								"$ref": "#/components/schemas/HeightClassificationResult"
+							},
+							{
+								"$ref": "#/components/schemas/AgePredictionResult"
+							},
+							{
+								"$ref": "#/components/schemas/StormPreventionResult"
+							}
+						]
+					}
+				}
+			},
+			"HeightClassificationResult": {
+				"type": "object",
+				"required": ["cluster", "cluster_label", "num_clusters"],
+				"properties": {
+					"cluster": {
+						"type": "integer"
+					},
+					"cluster_label": {
+						"type": "string",
+						"example": "Grand"
+					},
+					"num_clusters": {
+						"type": "integer",
+						"example": 2
+					}
+				}
+			},
+			"AgePredictionResult": {
+				"type": "object",
+				"required": ["predicted_age", "model_file", "model_name", "gridsearch"],
+				"properties": {
+					"predicted_age": {
+						"type": "number",
+						"format": "float"
+					},
+					"model_file": {
+						"type": "string"
+					},
+					"model_name": {
+						"type": "string"
+					},
+					"gridsearch": {
+						"type": "boolean"
+					},
+					"species": {
+						"type": "string"
+					}
+				}
+			},
+			"StormPreventionResult": {
+				"type": "object",
+				"required": ["prediction", "raw_prediction", "confidence_percent"],
+				"properties": {
+					"prediction": {
+						"type": "string",
+						"example": "SÛR"
+					},
+					"raw_prediction": {
+						"type": "string"
+					},
+					"confidence_percent": {
+						"type": "number",
+						"format": "float"
+					}
+				}
+			},
+			"ErrorResponse": {
+				"type": "object",
+				"required": ["ok", "error"],
+				"properties": {
+					"ok": {
+						"type": "boolean",
+						"example": false
+					},
+					"error": {
+						"type": "object",
+						"required": ["type", "message"],
+						"properties": {
+							"type": {
+								"type": "string"
+							},
+							"message": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			},
+			"Espece": {
+				"type": "object",
+				"required": ["id_espece", "nom_code", "nom_commun", "nom_scientifique"],
+				"properties": {
+					"id_espece": {
+						"type": "integer",
+						"example": 1
+					},
+					"nom_code": {
+						"type": "string",
+						"example": "QUE-ROB"
+					},
+					"nom_commun": {
+						"type": "string",
+						"example": "Chêne"
+					},
+					"nom_scientifique": {
+						"type": "string",
+						"example": "Quercus robur"
+					}
+				}
+			},
+			"Etat": {
+				"type": "object",
+				"required": ["id_etat", "libelle"],
+				"properties": {
+					"id_etat": {
+						"type": "integer"
+					},
+					"libelle": {
+						"type": "string",
+						"example": "EN PLACE"
+					}
+				}
+			},
+			"StadeDeveloppement": {
+				"type": "object",
+				"required": ["id_stade", "libelle"],
+				"properties": {
+					"id_stade": {
+						"type": "integer"
+					},
+					"libelle": {
+						"type": "string",
+						"example": "Jeune"
+					}
+				}
+			},
+			"TypePort": {
+				"type": "object",
+				"required": ["id_port", "libelle"],
+				"properties": {
+					"id_port": {
+						"type": "integer"
+					},
+					"libelle": {
+						"type": "string"
+					}
+				}
+			},
+			"TypePied": {
+				"type": "object",
+				"required": ["id_pied", "libelle"],
+				"properties": {
+					"id_pied": {
+						"type": "integer"
+					},
+					"libelle": {
+						"type": "string"
+					}
+				}
+			},
+			"Arbre": {
+				"type": "object",
+				"required": ["id_arbre", "latitude", "longitude"],
+				"properties": {
+					"id_arbre": {
+						"type": "integer"
+					},
+					"id_espece": {
+						"type": ["integer", "null"]
+					},
+					"id_etat": {
+						"type": ["integer", "null"]
+					},
+					"id_stade": {
+						"type": ["integer", "null"]
+					},
+					"id_port": {
+						"type": ["integer", "null"]
+					},
+					"id_pied": {
+						"type": ["integer", "null"]
+					},
+					"est_remarquable": {
+						"type": "boolean",
+						"default": false
+					},
+					"hauteur_totale": {
+						"type": ["number", "null"],
+						"format": "float"
+					},
+					"hauteur_tronc": {
+						"type": ["number", "null"],
+						"format": "float"
+					},
+					"diametre_tronc": {
+						"type": ["number", "null"],
+						"format": "float"
+					},
+					"latitude": {
+						"type": "number",
+						"format": "float"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "float"
+					}
+				}
+			},
+			"ArbreCreateRequest": {
+				"type": "object",
+				"required": ["latitude", "longitude"],
+				"properties": {
+					"id_espece": {
+						"type": ["integer", "null"]
+					},
+					"id_etat": {
+						"type": ["integer", "null"]
+					},
+					"id_stade": {
+						"type": ["integer", "null"]
+					},
+					"id_port": {
+						"type": ["integer", "null"]
+					},
+					"id_pied": {
+						"type": ["integer", "null"]
+					},
+					"est_remarquable": {
+						"type": "boolean",
+						"default": false
+					},
+					"hauteur_totale": {
+						"type": ["number", "null"],
+						"format": "float"
+					},
+					"hauteur_tronc": {
+						"type": ["number", "null"],
+						"format": "float"
+					},
+					"diametre_tronc": {
+						"type": ["number", "null"],
+						"format": "float"
+					},
+					"latitude": {
+						"type": "number",
+						"format": "float"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "float"
+					}
+				}
+			},
+			"ArbreUpdateRequest": {
+				"type": "object",
+				"properties": {
+					"id_espece": {
+						"type": ["integer", "null"]
+					},
+					"id_etat": {
+						"type": ["integer", "null"]
+					},
+					"id_stade": {
+						"type": ["integer", "null"]
+					},
+					"id_port": {
+						"type": ["integer", "null"]
+					},
+					"id_pied": {
+						"type": ["integer", "null"]
+					},
+					"est_remarquable": {
+						"type": "boolean"
+					},
+					"hauteur_totale": {
+						"type": ["number", "null"],
+						"format": "float"
+					},
+					"hauteur_tronc": {
+						"type": ["number", "null"],
+						"format": "float"
+					},
+					"diametre_tronc": {
+						"type": ["number", "null"],
+						"format": "float"
+					},
+					"latitude": {
+						"type": "number",
+						"format": "float"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "float"
+					}
+				}
+			}
+		}
+	}
+}
