@@ -1,0 +1,8 @@
+{"ts":"2026-04-29T14:07:28+00:00","level":"info","message":"incoming_request","context":{"method":"GET","uri":"\/WEB\/php\/api.php","remote_addr":"::1","body":null}}
+{"ts":"2026-04-29T14:07:28+00:00","level":"warning","message":"not_found","context":{"path":"\/WEB\/php\/api.php","method":"GET"}}
+{"ts":"2026-04-29T14:07:50+00:00","level":"info","message":"incoming_request","context":{"method":"GET","uri":"\/WEB\/php\/api.php\/arbres","remote_addr":"::1","body":null}}
+{"ts":"2026-04-29T14:07:50+00:00","level":"info","message":"list_arbres","context":{"result_count":0}}
+{"ts":"2026-04-29T14:09:24+00:00","level":"info","message":"incoming_request","context":{"method":"GET","uri":"\/WEB\/php\/api.php\/arbres","remote_addr":"::1","body":null}}
+{"ts":"2026-04-29T14:09:24+00:00","level":"info","message":"list_arbres","context":{"result_count":0}}
+{"ts":"2026-04-29T14:24:14+00:00","level":"info","message":"incoming_request","context":{"method":"GET","uri":"\/WEB\/php\/api.php\/especes","remote_addr":"::1","body":null}}
+{"ts":"2026-04-29T14:24:14+00:00","level":"info","message":"list_especes","context":{"result_count":239}}

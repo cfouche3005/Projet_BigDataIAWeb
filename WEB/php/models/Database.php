@@ -4,17 +4,19 @@ class Database {
 	private $pdo;
 
 	public function __construct() {
-		$dsn = sprintf(
-			'pgsql:host=%s;port=%d;dbname=%s',
-			DB_HOST,
-			DB_PORT,
-			DB_NAME
-		);
+		$databaseDirectory = dirname(DB_PATH);
+		if (!is_dir($databaseDirectory)) {
+			mkdir($databaseDirectory, 0755, true);
+		}
 
-		$this->pdo = new PDO($dsn, DB_USER, DB_PASS, [
+		$dsn = 'sqlite:' . DB_PATH;
+
+		$this->pdo = new PDO($dsn, null, null, [
 			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 		]);
+
+		$this->pdo->exec('PRAGMA foreign_keys = ON');
 	}
 
 	public function query($sql, $params = []) {

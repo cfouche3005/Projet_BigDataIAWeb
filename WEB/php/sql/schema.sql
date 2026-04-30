@@ -1,9 +1,11 @@
--- Database schema for the Tree API
+-- Database schema for the Tree API (SQLite)
 -- This file defines all the tables needed by the application
+
+PRAGMA foreign_keys = ON;
 
 -- Species reference table
 CREATE TABLE IF NOT EXISTS especes (
-    id_espece SERIAL PRIMARY KEY,
+    id_espece INTEGER PRIMARY KEY AUTOINCREMENT,
     nom_code VARCHAR(50) NOT NULL UNIQUE,
     nom_commun VARCHAR(150) NOT NULL,
     nom_scientifique VARCHAR(150) NOT NULL
@@ -11,46 +13,51 @@ CREATE TABLE IF NOT EXISTS especes (
 
 -- Tree states (e.g., "EN PLACE", "ESSOUC", "REMPLACE", "ABATTU")
 CREATE TABLE IF NOT EXISTS etats (
-    id_etat SERIAL PRIMARY KEY,
+    id_etat INTEGER PRIMARY KEY AUTOINCREMENT,
     libelle VARCHAR(50) NOT NULL
 );
 
 -- Development stages (e.g., "Jeune", "Adulte", "Mature", "Semis", "Vieux")
 CREATE TABLE IF NOT EXISTS stades_developpement (
-    id_stade SERIAL PRIMARY KEY,
+    id_stade INTEGER PRIMARY KEY AUTOINCREMENT,
     libelle VARCHAR(50) NOT NULL
 );
 
 -- Port types (tree form/canopy type)
 CREATE TABLE IF NOT EXISTS types_port (
-    id_port SERIAL PRIMARY KEY,
+    id_port INTEGER PRIMARY KEY AUTOINCREMENT,
     libelle VARCHAR(50) NOT NULL
 );
 
 -- Pied types (tree base/root type)
 CREATE TABLE IF NOT EXISTS types_pied (
-    id_pied SERIAL PRIMARY KEY,
+    id_pied INTEGER PRIMARY KEY AUTOINCREMENT,
     libelle VARCHAR(50) NOT NULL
 );
 
 -- Main trees table
 CREATE TABLE IF NOT EXISTS arbres (
-    id_arbre SERIAL PRIMARY KEY,
-    id_espece INTEGER REFERENCES especes(id_espece),
-    id_etat INTEGER REFERENCES etats(id_etat),
-    id_stade INTEGER REFERENCES stades_developpement(id_stade),
-    id_port INTEGER REFERENCES types_port(id_port),
-    id_pied INTEGER REFERENCES types_pied(id_pied),
-    est_remarquable BOOLEAN DEFAULT FALSE,
-    hauteur_totale NUMERIC(5,2),
-    hauteur_tronc NUMERIC(5,2),
-    diametre_tronc NUMERIC(5,2),
-    latitude NUMERIC(9,6) NOT NULL,
-    longitude NUMERIC(9,6) NOT NULL
+    id_arbre INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_espece INTEGER,
+    id_etat INTEGER,
+    id_stade INTEGER,
+    id_port INTEGER,
+    id_pied INTEGER,
+    est_remarquable INTEGER DEFAULT 0,
+    hauteur_totale REAL,
+    hauteur_tronc REAL,
+    diametre_tronc REAL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL,
+    FOREIGN KEY (id_espece) REFERENCES especes(id_espece) ON DELETE SET NULL,
+    FOREIGN KEY (id_etat) REFERENCES etats(id_etat) ON DELETE SET NULL,
+    FOREIGN KEY (id_stade) REFERENCES stades_developpement(id_stade) ON DELETE SET NULL,
+    FOREIGN KEY (id_port) REFERENCES types_port(id_port) ON DELETE SET NULL,
+    FOREIGN KEY (id_pied) REFERENCES types_pied(id_pied) ON DELETE SET NULL
 );
 
 -- Indexes for common queries
-CREATE INDEX IF NOT EXISTS idx_arbres_latitude_longitude ON arbres(latitude, longitude);
-CREATE INDEX IF NOT EXISTS idx_arbres_id_espece ON arbres(id_espece);
-CREATE INDEX IF NOT EXISTS idx_arbres_id_etat ON arbres(id_etat);
-CREATE INDEX IF NOT EXISTS idx_especes_nom_code ON especes(nom_code);
+CREATE INDEX idx_arbres_latitude_longitude ON arbres(latitude, longitude);
+CREATE INDEX idx_arbres_id_espece ON arbres(id_espece);
+CREATE INDEX idx_arbres_id_etat ON arbres(id_etat);
+CREATE INDEX idx_especes_nom_code ON especes(nom_code);

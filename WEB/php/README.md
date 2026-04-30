@@ -7,50 +7,47 @@ Full-stack PHP API for the tree database and model predictions.
 ### Prerequisites
 
 - PHP 7.4+
-- PostgreSQL 12+
+- SQLite 3+
 - Python 3.8+ (for the CLI models)
 
 ### Setup Steps
 
 1. **Database Setup**
 
-   Create the PostgreSQL database and tables using the provided schema:
+  Create the SQLite database file and tables using the provided schema:
 
    ```bash
-   psql -U postgres -d your_database < /path/to/schema.sql
+  mkdir -p ../data
+  sqlite3 ../data/trees.sqlite < /path/to/schema.sql
    ```
 
 2. **PHP Configuration**
 
-   Edit `config/database.php` or set environment variables:
+  Edit `../config.php` (root `WEB/config.php`) or set environment variables:
 
    ```bash
-   export DB_HOST=localhost
-   export DB_PORT=5432
-   export DB_NAME=arbres_db
-   export DB_USER=postgres
-   export DB_PASS=password
+  export DB_PATH=/home/cfouche/Documents/Code/Projet_BigDataIAWeb/WEB/data/trees.sqlite
    export PYTHON_BIN=/path/to/venv/bin/python
    ```
 
 3. **Web Server Setup**
 
-   For Apache, ensure `.htaccess` rewrites or configure the VirtualHost to route all requests to `index.php`:
+  For Apache, use root `WEB/.htaccess` rewrites or configure the VirtualHost to route all API requests to `php/api.php`:
 
    ```apache
-   <Directory /path/to/WEB/php>
+     <Directory /path/to/WEB>
        RewriteEngine On
        RewriteCond %{REQUEST_FILENAME} !-f
        RewriteCond %{REQUEST_FILENAME} !-d
-       RewriteRule ^(.*)$ index.php [QSA,L]
+      RewriteRule ^api/(.*)$ php/api.php [QSA,L]
    </Directory>
    ```
 
-   For Nginx:
+  For Nginx:
 
    ```nginx
    location /api {
-       try_files $uri $uri/ /index.php?$query_string;
+       try_files $uri $uri/ /php/api.php?$query_string;
    }
    ```
 
@@ -175,20 +172,23 @@ List all pied types.
 ## File Structure
 
 ```
-php/
-├── index.php                          # Entry point and router
-├── config/
-│   └── database.php                   # Database configuration
-├── models/
-│   └── Database.php                   # Database abstraction layer
-├── controllers/
-│   ├── PredictionController.php       # Predictions endpoint
-│   ├── ArbreController.php            # Trees CRUD
-│   └── ReferenceController.php        # Reference data (lookup tables)
-├── utils/
-│   ├── Response.php                   # HTTP response helpers
-│   └── PythonCLI.php                  # Python CLI wrapper
-└── README.md                          # This file
+WEB/
+├── .htaccess                          # Apache rewrite entrypoint
+├── config.php                         # Root deployment configuration
+├── php/
+│   ├── api.php                        # Entry point and router
+│   ├── models/
+│   │   └── Database.php               # Database abstraction layer
+│   ├── controllers/
+│   │   ├── PredictionController.php   # Predictions endpoint
+│   │   ├── ArbreController.php        # Trees CRUD
+│   │   └── ReferenceController.php    # Reference data (lookup tables)
+│   ├── utils/
+│   │   ├── Response.php               # HTTP response helpers
+│   │   └── PythonCLI.php              # Python CLI wrapper
+│   └── README.md                      # This file
+└── python/
+  └── app.py                         # Python CLI entrypoint
 ```
 
 ## Error Handling
@@ -235,20 +235,21 @@ See the Swagger specification at `../docs/swagger.json` for the full schema docu
 
 ### Python CLI Not Found
 
-Ensure `PYTHON_BIN` environment variable or configuration points to the correct Python executable:
+Ensure `PYTHON_BIN` and `DB_PATH` environment variables or configuration point to the correct paths:
 
 ```bash
 export PYTHON_BIN=/home/cfouche/Documents/Code/Projet_BigDataIAWeb/.venv/bin/python
+export DB_PATH=/home/cfouche/Documents/Code/Projet_BigDataIAWeb/WEB/data/trees.sqlite
 ```
 
 ### Database Connection Failed
 
-Verify PostgreSQL is running and credentials are correct:
+Verify the SQLite file exists and is writable:
 
 ```bash
-psql -h localhost -U postgres -c "SELECT 1"
+ls -l /home/cfouche/Documents/Code/Projet_BigDataIAWeb/WEB/data/trees.sqlite
 ```
 
 ### 404 Errors
 
-Ensure your web server is correctly routing all requests to `index.php`.
+Ensure your web server is correctly routing all requests to `api.php`.

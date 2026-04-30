@@ -55,13 +55,13 @@ class ArbreController {
 		}
 
 		$sql = sprintf(
-			'INSERT INTO arbres (%s) VALUES (%s) RETURNING *',
+			'INSERT INTO arbres (%s) VALUES (%s)',
 			implode(', ', $columns),
 			implode(', ', $placeholders)
 		);
 
-		$result = $this->db->fetchOne($sql, $values);
-		return $result;
+		$this->db->execute($sql, $values);
+		return $this->getArbre($this->db->lastInsertId());
 	}
 
 	public function updateArbre($id, $payload) {
@@ -91,12 +91,12 @@ class ArbreController {
 
 		$values[] = $id;
 		$sql = sprintf(
-			'UPDATE arbres SET %s WHERE id_arbre = ? RETURNING *',
+			'UPDATE arbres SET %s WHERE id_arbre = ?',
 			implode(', ', $updates)
 		);
 
-		$result = $this->db->fetchOne($sql, $values);
-		return $result;
+		$this->db->execute($sql, $values);
+		return $this->getArbre($id);
 	}
 
 	public function deleteArbre($id) {

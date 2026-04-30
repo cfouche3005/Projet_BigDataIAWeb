@@ -1,0 +1,4 @@
+[29-Apr-2026 14:07:28 UTC] PHP Warning:  Undefined variable $request_body in /home/cfouche/Documents/Code/Projet_BigDataIAWeb/WEB/php/api.php on line 34
+[29-Apr-2026 14:07:50 UTC] PHP Warning:  Undefined variable $request_body in /home/cfouche/Documents/Code/Projet_BigDataIAWeb/WEB/php/api.php on line 34
+[29-Apr-2026 14:09:24 UTC] PHP Warning:  Undefined variable $request_body in /home/cfouche/Documents/Code/Projet_BigDataIAWeb/WEB/php/api.php on line 34
+[29-Apr-2026 14:24:14 UTC] PHP Warning:  Undefined variable $request_body in /home/cfouche/Documents/Code/Projet_BigDataIAWeb/WEB/php/api.php on line 34
