@@ -1,50 +1,51 @@
--- Generated SQL for lookup tables
-BEGIN TRANSACTION;
-PRAGMA foreign_keys=OFF;
-
--- etats
-INSERT OR IGNORE INTO etats (libelle) VALUES ('ABATTU');
-INSERT OR IGNORE INTO etats (libelle) VALUES ('EN PLACE');
-INSERT OR IGNORE INTO etats (libelle) VALUES ('Essouché');
-INSERT OR IGNORE INTO etats (libelle) VALUES ('Non essouché');
-INSERT OR IGNORE INTO etats (libelle) VALUES ('REMPLACÉ');
-INSERT OR IGNORE INTO etats (libelle) VALUES ('SUPPRIMÉ');
-
--- stades_developpement
-INSERT OR IGNORE INTO stades_developpement (libelle) VALUES ('Adulte');
-INSERT OR IGNORE INTO stades_developpement (libelle) VALUES ('Jeune');
-INSERT OR IGNORE INTO stades_developpement (libelle) VALUES ('Senescent');
-INSERT OR IGNORE INTO stades_developpement (libelle) VALUES ('Vieux/Dépérissant');
-
--- types_port
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('Couronne');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('Libre');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('Semi libre');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('architecturé');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('couronné');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('cépée');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('libre');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('rideau');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('réduit');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('réduit relâché');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('semi libre');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('têtard');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('têtard relâché');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('tête de chat');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('tête de chat relaché');
-INSERT OR IGNORE INTO types_port (libelle) VALUES ('étêté');
-
--- types_pied
-INSERT OR IGNORE INTO types_pied (libelle) VALUES ('Bac de plantation');
-INSERT OR IGNORE INTO types_pied (libelle) VALUES ('Bande de terre');
-INSERT OR IGNORE INTO types_pied (libelle) VALUES ('Revetement non permeable');
-INSERT OR IGNORE INTO types_pied (libelle) VALUES ('Terre');
-INSERT OR IGNORE INTO types_pied (libelle) VALUES ('bande de terre');
-INSERT OR IGNORE INTO types_pied (libelle) VALUES ('fosse arbre');
-INSERT OR IGNORE INTO types_pied (libelle) VALUES ('gazon');
-INSERT OR IGNORE INTO types_pied (libelle) VALUES ('terre');
-INSERT OR IGNORE INTO types_pied (libelle) VALUES ('toile tissée');
-INSERT OR IGNORE INTO types_pied (libelle) VALUES ('végétation');
-
-PRAGMA foreign_keys=ON;
-COMMIT;
+-- Insertion de 50 arbres (id_arbre is AUTOINCREMENT)
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (146, 1, 1, 1, 1, 0, 6, 2.5, 49, '49.8505942916414', '3.24976200724895');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (227, 1, 2, 2, 1, 0, 10, 3, 155, '49.8312532674422', '3.25602008630148');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (63, 1, 1, 3, 2, 0, 6, 3, 40, '49.8562603927658', '3.2744753529344');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (129, 1, 2, 3, 1, 0, 5, 2, 70, '49.8604651129268', '3.29636115876669');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (19, 1, 2, 3, 3, 0, 10, 3, 80, '49.8428254434978', '3.30439844321724');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (146, 1, 2, 3, 3, 0, 20, 4, 126, '49.8513131234034', '3.29107708595766');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (28, 1, 2, 3, 1, 0, 23, 3, 180, '49.8442493842786', '3.309059380078');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (227, 1, 2, 2, 1, 0, 12, 5, 142, '49.8538239876496', '3.2572368121825');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (146, 1, 2, 3, 2, 0, 14, 4, 120, '49.8420454074183', '3.29557352033963');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (143, 1, 2, 3, 1, 0, 15, 2, 180, '49.8465182555053', '3.31177161151938');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (43, 1, 2, 4, 4, 0, 8, 2, 70, '49.8469830996656', '3.27371674572618');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (227, 1, 2, 3, 1, 0, 24, 10, 260, '49.8498166286272', '3.29433264438517');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (146, 1, 2, 3, 1, 0, 17, 4, 210, '49.8342916160645', '3.29922515808789');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (24, 1, 2, 3, 2, 0, 8, 3, 140, '49.8352940213153', '3.29316861422391');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (164, 2, 2, 3, 3, 0, 7, 2, 120, '49.8314109122116', '3.30482932184241');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (19, 1, 1, 3, 1, 0, 6, 2.5, 69, '49.8461171712416', '3.24679677989376');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (8, 1, 1, 3, 4, 0, 10, 2, 75, '49.8658018582908', '3.30230588762714');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (146, 1, 2, 5, 2, 0, 14, 8, 230, '49.8413152307555', '3.29313559631048');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (221, 1, 1, 1, 3, 0, 3, 0.5, 20, '49.8553396688274', '3.26138196152008');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (53, 1, 1, 3, 1, 0, 12, 4.28163727959698, 140, '49.8537718692279', '3.26485762800337');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (41, 2, 1, 3, 1, 0, 5, 2, 30, '49.8432248938207', '3.28092840566397');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (233, 1, 1, 3, 1, 0, 7, 3, 59, '49.8423606674017', '3.2573267321382');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (143, 2, 2, 3, 3, 0, 27, 8, 155, '49.8622877631106', '3.29720850122351');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (108, 1, 1, 3, 4, 0, 7, 2, 62, '49.8479987725368', '3.29379387806679');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (144, 1, 1, 3, 1, 0, 6, 1, 91, '49.8585833482354', '3.26445373237887');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (85, 1, 1, 3, 1, 0, 7, 2, 25, '49.855550624344', '3.30596173922171');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (24, 1, 2, 6, 4, 0, 20, 12.281637279597, 260, '49.8588094793007', '3.29328103350528');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (80, 1, 1, 7, 1, 0, 7, 0.5, 110, '49.8570060038974', '3.26226781568005');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (146, 1, 1, 3, 1, 0, 7, 3, 41, '49.8454184017791', '3.25570332438904');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (143, 2, 2, 3, 1, 0, 18, 2.5, 160, '49.8466057941489', '3.31280809814572');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (146, 1, 2, 3, 1, 0, 17, 4, 140, '49.8340222828557', '3.30015187857742');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (145, 1, 2, 5, 1, 0, 7, 2, 94, '49.8590302577759', '3.260408092034');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (43, 3, 2, 3, 1, 0, 14, 2.5, 107, '49.8369086780073', '3.26588421865615');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (80, 1, 1, 7, 1, 0, 7, 0.5, 80, '49.8587613807968', '3.25734304901624');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (144, 1, 1, 3, 1, 0, 5, 3, 50, '49.8394675976521', '3.29961969800112');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (146, 1, 2, 3, 4, 0, 18, 3, 121, '49.8524713264086', '3.28935812587854');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (24, 1, 2, 3, 1, 0, 23, 10, 125, '49.851879995632', '3.2926346757331');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (227, 1, 1, 3, 1, 0, 6, 2, 43, '49.8572182977679', '3.25680805288166');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (227, 1, 2, 3, 1, 0, 9, 2, 70, '49.8651176487349', '3.2812770303941');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (113, 1, 2, 3, 4, 0, 5, 2, 62, '49.8436900971972', '3.28892512753615');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (227, 1, 1, 3, 4, 0, 6, 2, 38, '49.8498928806874', '3.26975931322382');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (227, 1, 2, 8, 3, 0, 15, 5, 121, '49.8523880235871', '3.29053524110261');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (178, 1, 1, 6, 1, 0, 8, 0.5, 45, '49.8590064420847', '3.29211464320751');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (80, 1, 1, 2, 1, 0, 4, 0.5, 80, '49.8568589367874', '3.2633065452008');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (141, 1, 2, 3, 1, 0, 18, 6, 155, '49.8554104828398', '3.30785560979743');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (72, 1, 2, 3, 1, 0, 7, 0.5, 95, '49.8634855792758', '3.30155034456374');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (43, 1, 1, 6, 1, 0, 2, 0.5, 10, '49.8633325754501', '3.29857141000818');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (164, 1, 2, 3, 1, 0, 6, 2, 115, '49.840203402335', '3.25902442026822');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (146, 1, 1, 3, 1, 0, 7, 3, 41, '49.8447899305731', '3.25039845353714');
+INSERT INTO arbres (id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, hauteur_totale, hauteur_tronc, diametre_tronc, latitude, longitude) VALUES (204, 1, 2, 3, 2, 0, 17, 5, 107, '49.8522364065662', '3.28952228011845');
