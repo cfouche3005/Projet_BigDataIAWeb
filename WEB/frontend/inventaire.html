@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventaire - Gestion du patrimoine arboré</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="js/config.js" defer></script>
+    <script src="js/app.js" defer></script>
+</head>
+<body>
+
+<!-- BARRE DE NAVIGATION -->
+<header>
+    <nav class="navbar">
+        <h1 class="logo">Gestion du patrimoine arboré</h1>
+        <ul class="nav-links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="ajouter.html">Ajouter un arbre</a></li>
+            <li><a href="inventaire.html" class="active">Inventaire</a></li>
+            <li><a href="carte.html">Carte</a></li>
+
+        </ul>
+    </nav>
+</header>
+
+<main class="main-inventaire">
+    <!-- TITRE DE LA PAGE -->
+    <div class="form-header">
+        <h2>Inventaire des arbres de la base</h2>
+        <p>Visualiser les arbres ajoutés à la base avec la prédiction de leur âge</p>
+    </div>
+
+    <!-- CONTENEUR DU TABLEAU -->
+    <div class="panel-blanc table-container">
+        <table class="table-inventaire">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Hauteur<br>Totale (m)</th>
+                <th>Hauteur<br>Tronc (m)</th>
+                <th>Diamètre<br>Tronc (cm)</th>
+                <th>Espèce</th>
+                <th>Stade de<br>Développment</th>
+                <th>Etat</th>
+                <th>Type de<br>port</th>
+                <th>Type de<br>pied</th>
+                <th>Remarquable</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Age<br>Estimé</th>
+            </tr>
+            </thead>
+            <tbody id="inventaire-table-body">
+            <tr>
+                <td colspan="13">Chargement de l’inventaire depuis l’API...</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- BOUTON CENTRAL DU BAS -->
+    <div class="action-centrale">
+        <a href="carte.html">
+            <button class="btn btn-vert">Voir dans la Map</button>
+        </a>
+    </div>
+</main>
+
+<!-- PIED DE PAGE -->
+<footer>
+    <span>Projet Big Data / IA / Web – 2026</span>
+    <span class="footer-center">Système de Gestion du patrimoine arboré de Saint-Quentin</span>
+    <span>© Tous droits réservés</span>
+</footer>
+
+</body>
+</html>

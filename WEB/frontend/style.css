@@ -1,0 +1,482 @@
+/* =========================================
+   STYLE.CSS COMPLET POUR TOUT LE PROJET
+   ========================================= */
+
+/* --- 1. RESET & STYLE DE BASE --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #fcfcfc;
+    color: #000;
+}
+
+main {
+    padding: 40px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* --- 2. BARRE DE NAVIGATION ET FOOTER --- */
+header {
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    padding: 15px 60px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    color: #2b6e44;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.nav-links a.active {
+    background-color: #2b6e44;
+    color: white;
+}
+
+.nav-links a:hover:not(.active) {
+    background-color: #f0f0f0;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 60px;
+    background-color: #fff;
+    font-size: 12px;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 60px;
+}
+
+.footer-center {
+    color: #2b6e44;
+    font-weight: bold;
+}
+
+/* --- 3. STYLE GLOBAL DES BOUTONS --- */
+.btn {
+    text-decoration: none;
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.1s, box-shadow 0.2s;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    /* Vert par défaut (pour l'accueil notamment) */
+    background-color: #2b6e44;
+    color: white;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-vert {
+    background-color: #2b6e44;
+    color: white;
+    box-shadow: 0 4px 10px rgba(43, 110, 68, 0.2);
+}
+
+.btn-vert:hover {
+    background-color: #245c3a;
+}
+
+.btn-gris {
+    background-color: #dde1db;
+    color: #000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.btn-gris:hover {
+    background-color: #d1d5cf;
+}
+
+
+/* =========================================
+   PAGE 1 : ACCUEIL (index.html)
+   ========================================= */
+
+.hero-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+.hero-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.titre-vert {
+    color: #2b6e44;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.hero-image {
+    flex: 1;
+}
+
+.hero-image img {
+    width: 100%;
+    border-radius: 20px;
+    object-fit: cover;
+}
+
+.encart-gris {
+    background-color: #dde5db;
+    padding: 30px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.encart-large {
+    text-align: center;
+    padding: 40px;
+}
+
+.encart-large h3 {
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.encart-large p {
+    margin-bottom: 15px;
+}
+
+.boutons-action {
+    display: flex;
+    gap: 20px;
+}
+
+
+/* =========================================
+   PAGE 2 : AJOUTER UN ARBRE (ajouter.html)
+   ========================================= */
+
+.form-header {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.form-header h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.form-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+.form-sections-container {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.panel-blanc {
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.section-dimensions { flex: 1; }
+.section-complements { flex: 2; }
+
+.form-section h3 {
+    font-size: 20px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.complements-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.form-bottom-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 40px;
+    gap: 40px;
+}
+
+.section-localisation { flex: 1; }
+
+.localisation-inputs {
+    display: flex;
+    gap: 30px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: #fff;
+    color: #333;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: #aaa;
+    outline: none;
+}
+
+.input-group input::placeholder,
+.input-group select option:first-child {
+    color: #ccc;
+    font-style: italic;
+}
+
+.input-group select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%;
+    background-size: 12px auto;
+}
+
+.boutons-formulaire {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+/* Spinner et Notifications (JS) */
+.btn-vert .spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    position: absolute;
+    animation: spin 1s linear infinite;
+}
+
+.btn-vert .hidden { display: none; }
+.btn.chargement { color: transparent; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.notification {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.notification.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.notif-success {
+    background-color: #e6f7ed;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 15px 30px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.notif-error {
+    background-color: #fdecea;
+    border: 1px solid #f5c2c7;
+    color: #842029;
+    padding: 15px 30px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+
+/* =========================================
+   PAGE 3 : INVENTAIRE (inventaire.html)
+   ========================================= */
+
+.table-container {
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.table-inventaire {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 13px;
+}
+
+.table-inventaire th {
+    background-color: #d1dcd1;
+    color: #000;
+    font-weight: bold;
+    padding: 15px 10px;
+    border-bottom: 2px solid #fff;
+}
+
+.table-inventaire td {
+    padding: 12px 10px;
+    vertical-align: middle;
+}
+
+.table-inventaire tbody tr { background-color: #ffffff; }
+.table-inventaire tbody tr.row-alt { background-color: #e5ece5; }
+
+.btn-predire-petit {
+    background-color: #2b6e44;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-predire-petit:hover { background-color: #245c3a; }
+.action-centrale {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================
+   PAGE 4 : CARTE (carte.html)
+   ========================================= */
+
+.carte-container { padding: 25px; }
+
+.carte-placeholder {
+    width: 100%;
+    height: 550px;
+    background-color: #d8d8d8;
+    border-radius: 4px;
+}
+
+
+/* =========================================
+   PAGE 5 : CLUSTER (cluster.html)
+   ========================================= */
+
+.cluster-layout {
+}
+
+.legende-sidebar {
+    margin-top: 30px;
+    width: 100%;
+}
+
+.legende-sidebar h3 {
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+.legende-liste {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.legende-liste li {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.cercle-legende {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background-color: #d8d8d8;
+    border-radius: 50%;
+}
+
+.carte-interactive-container {
+    flex: 1;
+    padding: 30px;
+}
+
+.carte-interactive-container h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.cluster-map-placeholder {
+    width: 100%;
+    height: 500px;
+    background-color: #d8d8d8;
+    border-radius: 4px;
+}
+.masque {
+    display: none;
+}

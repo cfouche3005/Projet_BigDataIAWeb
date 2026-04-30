@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carte & Clusters - Gestion du patrimoine arboré</title>
+  <link rel="stylesheet" href="style.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <script src="js/config.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+
+<!-- BARRE DE NAVIGATION (sans l'onglet Cluster) -->
+<header>
+  <nav class="navbar">
+    <h1 class="logo">Gestion du patrimoine arboré</h1>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="ajouter.html">Ajouter un arbre</a></li>
+      <li><a href="inventaire.html">Inventaire</a></li>
+      <li><a href="carte.html" class="active">Carte</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="main-carte">
+  <!-- TITRE DE LA PAGE -->
+  <div class="form-header">
+    <h2>Visualisation sur carte des arbres</h2>
+    <p>Visualisez l'inventaire et invoquez l'IA pour prédire les groupements (clusters)</p>
+  </div>
+
+  <p id="carte-api-status" class="form-header" style="margin-top: -10px; margin-bottom: 20px; color: #666;">Chargement des arbres depuis l’API...</p>
+
+  <!-- BOUTON D'INVOCATION DES CLUSTERS -->
+  <div class="action-centrale" style="margin-top: 0; margin-bottom: 30px;">
+    <button id="btn-toggle-cluster" class="btn btn-vert">Prédire les clusters</button>
+  </div>
+
+  <!-- CONTENEUR PRINCIPAL (Légende + Carte) -->
+  <div class="cluster-layout">
+
+    <!-- ZONE PRINCIPALE : CARTE -->
+    <section class="panel-blanc carte-interactive-container">
+      <div id="map" class="carte-placeholder"></div>
+      <!-- BARRE LATÉRALE : LÉGENDE (Cachée par défaut avec la classe "masque") -->
+      <aside id="legende-cluster" class="panel-blanc legende-sidebar masque" >
+        <h3>Légende (Clusters)</h3>
+        <ul class="legende-liste">
+          <li><span class="cercle-legende"></span> Petit</li>
+          <li><span class="cercle-legende"></span> Moyen</li>
+          <li><span class="cercle-legende"></span> Grand</li>
+        </ul>
+      </aside>
+    </section>
+
+  </div>
+</main>
+
+<!-- PIED DE PAGE -->
+<footer>
+  <span>Projet Big Data / IA / Web – 2026</span>
+  <span class="footer-center">Système de Gestion du patrimoine arboré de Saint-Quentin</span>
+  <span>© Tous droits réservés</span>
+</footer>
+
+
+</body>
+</html>

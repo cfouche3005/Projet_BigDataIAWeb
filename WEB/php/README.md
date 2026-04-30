@@ -32,29 +32,61 @@ Full-stack PHP API for the tree database and model predictions.
 
 3. **Web Server Setup**
 
-  For Apache, use root `WEB/.htaccess` rewrites or configure the VirtualHost to route all API requests to `php/api.php`:
+  The API router is now at `php/api.php`. You can call it either directly or use server-level rewrites.
 
-   ```apache
-     <Directory /path/to/WEB>
-       RewriteEngine On
-       RewriteCond %{REQUEST_FILENAME} !-f
-       RewriteCond %{REQUEST_FILENAME} !-d
-      RewriteRule ^api/(.*)$ php/api.php [QSA,L]
-   </Directory>
+  **Option A: Direct Calls (Simplest)**
+
+  Call endpoints directly on `php/api.php` with `PATH_INFO`:
+
+   ```bash
+   curl http://localhost/php/api.php/arbres
+   curl http://localhost/php/api.php/predictions
    ```
 
-  For Nginx:
+  **Option B: Apache VirtualHost Rewrite**
+
+  Rewrite `/api/` requests to `php/api.php` in your VirtualHost:
+
+   ```apache
+   <VirtualHost *:80>
+       ServerName yourdomain.com
+       DocumentRoot /var/www/yourdomain/WEB
+
+       <Directory /var/www/yourdomain/WEB>
+           RewriteEngine On
+           RewriteCond %{REQUEST_FILENAME} !-f
+           RewriteCond %{REQUEST_FILENAME} !-d
+           RewriteRule ^api/(.*)$ php/api.php [QSA,L]
+       </Directory>
+   </VirtualHost>
+   ```
+
+  Then call with the `/api/` path:
+
+   ```bash
+   curl http://localhost/api/arbres
+   ```
+
+  **Option C: Nginx**
 
    ```nginx
-   location /api {
-       try_files $uri $uri/ /php/api.php?$query_string;
+   server {
+       listen 80;
+       server_name yourdomain.com;
+       root /var/www/yourdomain/WEB;
+
+       location /api {
+           rewrite ^/api/(.*)$ /php/api.php last;
+       }
    }
    ```
 
 4. **Test the API**
 
+   Direct call (no rewrite needed):
+
    ```bash
-   curl -X POST http://localhost/api/predictions \
+   curl -X POST http://localhost/php/api.php/predictions \
      -H 'Content-Type: application/json' \
      -d '{
        "model": "height_classification",
@@ -68,18 +100,18 @@ Full-stack PHP API for the tree database and model predictions.
 
 ## API Endpoints
 
-All endpoints are under `/api`.
+All endpoints are accessible at `/php/api.php/{endpoint}` (direct call) or `/api/{endpoint}` (if server rewrites configured).
 
 ### Predictions
 
-**POST /api/predictions**
+**POST /php/api.php/predictions** (or `/api/predictions` with rewrite)
 
 Run a model prediction. Returns the model output wrapped in a response object.
 
 **Example:**
 
 ```bash
-curl -X POST http://localhost/api/predictions \
+curl -X POST http://localhost/php/api.php/predictions \
   -H 'Content-Type: application/json' \
   -d '{
     "model": "age_prediction",
@@ -107,22 +139,22 @@ curl -X POST http://localhost/api/predictions \
 
 ### Trees
 
-**GET /api/arbres**
+**GET /php/api.php/arbres** (or `/api/arbres` with rewrite)
 
 List all trees.
 
-**GET /api/arbres/{id_arbre}**
+**GET /php/api.php/arbres/{id_arbre}** (or `/api/arbres/{id_arbre}` with rewrite)
 
 Get a tree by ID.
 
-**POST /api/arbres**
+**POST /php/api.php/arbres** (or `/api/arbres` with rewrite)
 
 Create a new tree record.
 
 **Example:**
 
 ```bash
-curl -X POST http://localhost/api/arbres \
+curl -X POST http://localhost/php/api.php/arbres \
   -H 'Content-Type: application/json' \
   -d '{
     "id_espece": 1,
@@ -135,37 +167,37 @@ curl -X POST http://localhost/api/arbres \
   }'
 ```
 
-**PATCH /api/arbres/{id_arbre}**
+**PATCH /php/api.php/arbres/{id_arbre}** (or `/api/arbres/{id_arbre}` with rewrite)
 
 Update a tree record.
 
-**DELETE /api/arbres/{id_arbre}**
+**DELETE /php/api.php/arbres/{id_arbre}** (or `/api/arbres/{id_arbre}` with rewrite)
 
 Delete a tree record.
 
 ### Reference Data
 
-**GET /api/especes**
+**GET /php/api.php/especes** (or `/api/especes` with rewrite)
 
 List all species.
 
-**GET /api/especes/{id_espece}**
+**GET /php/api.php/especes/{id_espece}** (or `/api/especes/{id_espece}` with rewrite)
 
 Get a species by ID.
 
-**GET /api/etats**
+**GET /php/api.php/etats** (or `/api/etats` with rewrite)
 
 List all tree states.
 
-**GET /api/stades-developpement**
+**GET /php/api.php/stades-developpement** (or `/api/stades-developpement` with rewrite)
 
 List all development stages.
 
-**GET /api/types-port**
+**GET /php/api.php/types-port** (or `/api/types-port` with rewrite)
 
 List all port types.
 
-**GET /api/types-pied**
+**GET /php/api.php/types-pied** (or `/api/types-pied` with rewrite)
 
 List all pied types.
 
@@ -252,4 +284,10 @@ ls -l /home/cfouche/Documents/Code/Projet_BigDataIAWeb/WEB/data/trees.sqlite
 
 ### 404 Errors
 
-Ensure your web server is correctly routing all requests to `api.php`.
+Ensure your web server is correctly routing requests to `php/api.php`. Test with direct calls:
+
+```bash
+curl http://localhost/php/api.php/arbres
+```
+
+If using server rewrites, verify the rewrite rules are active and PATH_INFO is enabled.

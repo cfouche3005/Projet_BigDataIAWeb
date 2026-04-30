@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajouter un arbre - Gestion du patrimoine arboré</title>
+  <!-- On réutilise le même fichier CSS que la page d'accueil -->
+  <link rel="stylesheet" href="style.css">
+  <script src="js/config.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+
+<!-- BARRE DE NAVIGATION (Copiée de l'index, onglet "Ajouter" actif) -->
+<header>
+  <nav class="navbar">
+    <h1 class="logo">Gestion du patrimoine arboré</h1>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <!-- C'est ici qu'on met la classe 'active' -->
+      <li><a href="ajouter.html" class="active">Ajouter un arbre</a></li>
+      <li><a href="inventaire.html">Inventaire</a></li>
+      <li><a href="carte.html">Carte</a></li>
+
+    </ul>
+  </nav>
+</header>
+
+<main class="main-formulaire">
+  <!-- TITRE DE LA PAGE -->
+  <div class="form-header">
+    <h2>Enregistrer un nouvel arbre</h2>
+    <p>Ajouter un nouvel arbre au système d'inventaire urbain avec des caractéristiques détaillées</p>
+  </div>
+
+  <!-- ZONE DE NOTIFICATION (Cachée par défaut) -->
+  <div id="notification-zone" class="notification hidden">
+    <div id="notif-content" class="notif-success">
+      <span class="icon">✅</span>
+      <span id="notif-message"></span>
+    </div>
+  </div>
+
+  <!-- FORMULAIRE PRINCIPAL -->
+  <form id="form-ajouter-arbre">
+
+    <div class="form-sections-container">
+      <!-- SECTION : Dimensions (Conteneur arrondi blanc) -->
+      <section class="form-section panel-blanc section-dimensions">
+        <h3>Dimensions</h3>
+        <div class="input-group">
+          <label for="hauteur_totale">Hauteur totale (m)</label>
+          <input type="number" step="0.1" id="hauteur_totale" name="hauteur_totale" placeholder="Value">
+        </div>
+        <div class="input-group">
+          <label for="hauteur_tronc">Hauteur du tronc (m)</label>
+          <input type="number" step="0.1" id="hauteur_tronc" name="hauteur_tronc" placeholder="Value">
+        </div>
+        <div class="input-group">
+          <label for="diametre_tronc">Diamètre du tronc (cm)</label>
+          <input type="number" step="1" id="diametre_tronc" name="diametre_tronc" placeholder="Value">
+        </div>
+      </section>
+
+      <!-- SECTION : Compléments (Conteneur arrondi blanc, 3x2 grid) -->
+      <section class="form-section panel-blanc section-complements">
+        <h3>Compléments</h3>
+        <div class="complements-grid">
+          <div class="input-group">
+            <label for="espece">Espèce d’arbre</label>
+            <select id="espece" name="espece">
+              <option value="" disabled selected hidden>Value</option>
+              <option value="chene">Chêne</option>
+              <option value="platane">Platane</option>
+              <option value="erable">Érable</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="stade_developpement">Stade de développement</label>
+            <select id="stade_developpement" name="stade_developpement">
+              <option value="" disabled selected hidden>Value</option>
+              <option value="jeune">Jeune</option>
+              <option value="adulte">Adulte</option>
+              <option value="vieux">Vieux</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="etat">État de l’arbre</label>
+            <select id="etat" name="etat">
+              <option value="" disabled selected hidden>Value</option>
+              <option value="sain">Sain</option>
+              <option value="malade">Malade</option>
+              <option value="supprime">Supprimé</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="type_port">Type de port</label>
+            <select id="type_port" name="type_port">
+              <option value="" disabled selected hidden>Value</option>
+              <option value="couronne">Couronne</option>
+              <option value="libre">Libre</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="type_pied">Type de pied</label>
+            <select id="type_pied" name="type_pied">
+              <option value="" disabled selected hidden>Value</option>
+              <option value="terre">Terre</option>
+              <option value="gazon">Gazon</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="est_remarquable">Arbre remarquable</label>
+            <select id="est_remarquable" name="est_remarquable">
+              <option value="" disabled selected hidden>Value</option>
+              <option value="true">Oui</option>
+              <option value="false">Non</option>
+            </select>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="form-bottom-container">
+      <!-- SECTION : Localisation (Conteneur arrondi blanc) -->
+      <section class="form-section panel-blanc section-localisation">
+        <h3>Localisation</h3>
+        <div class="localisation-inputs">
+          <div class="input-group">
+            <label for="longitude">Longitude</label>
+            <input type="number" step="0.000001" id="longitude" name="longitude" placeholder="Value">
+          </div>
+          <div class="input-group">
+            <label for="latitude">Latitude</label>
+            <input type="number" step="0.000001" id="latitude" name="latitude" placeholder="Value">
+          </div>
+        </div>
+      </section>
+
+      <!-- BOUTONS D'ACTION (Enregistrement simulé) -->
+      <div class="boutons-formulaire">
+        <button type="reset" class="btn btn-gris" id="btn-effacer">Effacer</button>
+        <button type="submit" class="btn btn-vert" id="btn-enregistrer">
+          <span id="text-enregistrer">Enregistrer</span>
+          <div id="spinner-chargement" class="spinner hidden"></div>
+        </button>
+      </div>
+    </div>
+
+  </form>
+</main>
+
+<!-- PIED DE PAGE (Copié de l'index) -->
+<footer>
+  <span>Projet Big Data / IA / Web – 2026</span>
+  <span class="footer-center">Système de Gestion du patrimoine arboré de Saint-Quentin</span>
+  <span>© Tous droits réservés</span>
+</footer>
+
+</body>
+</html>
