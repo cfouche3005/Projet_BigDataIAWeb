@@ -1,8 +1,0 @@
-<!-- Rewrite disabled: API routing must be handled by the server VirtualHost or by calling php/api.php directly -->
-
-<IfModule mod_authz_core.c>
-    # Deny direct access to log files for security
-    <FilesMatch "\.log$">
-        Require all denied
-    </FilesMatch>
-</IfModule>
