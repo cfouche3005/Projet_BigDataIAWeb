@@ -10,13 +10,15 @@ services:
       - "3000:80"
     environment:
       - PYTHON_BIN=/opt/venv/bin/python3
-      - DB_PATH=/var/www/html/WEB/data/trees.sqlite
+      - DB_PATH=/var/www/html/data/trees.sqlite
     restart: unless-stopped
     volumes:
       - .:/var/www/html
-      - app_data:/var/www/html/WEB/data
-      - app_logs:/var/www/html/WEB/logs
+      # Volumes persistants pour la base de données et les journaux (logs)
+      - app_data:/var/www/html/data
+      - app_logs:/var/www/html/logs
 
 volumes:
+  # Définition des volumes nommés
   app_data:
   app_logs:

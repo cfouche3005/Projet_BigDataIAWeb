@@ -1,38 +1,38 @@
 # WEB Python CLI
 
-This folder contains a small JSON-driven CLI that wraps the three tree models stored under `IA/`.
+Ce dossier contient une petite interface en ligne de commande (CLI) pilotée par JSON qui encapsule les trois modèles d'arbres stockés sous `IA/`.
 
-## File Layout
+## Structure des fichiers
 
-- `app.py` keeps the executable entrypoint.
-- `cli.py` handles JSON parsing, routing, and response formatting.
-- `common.py` stores shared paths and helpers.
-- `height_classification.py`, `age_prediction.py`, and `storm_prevention.py` hold the model-specific prediction logic.
-- `exceptions.py` defines the shared CLI exception.
+- `app.py` contient le point d'entrée exécutable.
+- `cli.py` gère l'analyse JSON, le routage et le formatage des réponses.
+- `common.py` stocke les chemins partagés et les fonctions d'aide.
+- `height_classification.py`, `age_prediction.py` et `storm_prevention.py` contiennent la logique de prédiction spécifique à chaque modèle.
+- `exceptions.py` définit les exceptions partagées de la CLI.
 
-## Usage
+## Utilisation
 
-You can pass the payload as a command-line JSON string:
+Vous pouvez passer la charge utile sous forme de chaîne JSON en ligne de commande :
 
 ```bash
 python3 app.py --json '{"client":"height_classification","num_clusters":2,"haut_tot":15,"tronc_diam":130,"age_estim":45,"fk_stadedev_encoded":0.0}'
 ```
 
-You can also pipe JSON through stdin:
+Vous pouvez également transmettre le JSON via l'entrée standard (stdin) :
 
 ```bash
 echo '{"client":"storm_prevention","haut_tronc":2.5,"haut_tot":15.0,"tronc_diam":45.0,"clc_nbr_diag":0}' | python3 app.py
 ```
 
-The script always prints one JSON object to stdout so PHP can decode it directly.
+Le script affiche toujours un objet JSON unique sur la sortie standard (stdout) afin que PHP puisse le décoder directement.
 
-## Model selection
+## Sélection du modèle
 
-- `height_classification` or `1` for the clustering model
-- `age_prediction` or `2` for the age regression model
-- `storm_prevention` or `3` for the storm-risk classification model
+- `height_classification` ou `1` pour le modèle de clustering (classification par taille)
+- `age_prediction` ou `2` pour le modèle de régression (prédiction de l'âge)
+- `storm_prevention` ou `3` pour le modèle de classification des risques de tempête
 
-## PHP example
+## Exemple PHP
 
 ```php
 $payload = [
@@ -49,6 +49,6 @@ $rawResponse = shell_exec($command);
 $response = json_decode($rawResponse, true);
 ```
 
-## Dependencies
+## Dépendances
 
-The CLI uses the same core Python stack as the rest of the project: `joblib`, `numpy`, `pandas`, and `scikit-learn`.
+La CLI utilise la même pile Python principale que le reste du projet : `joblib`, `numpy`, `pandas` et `scikit-learn`.

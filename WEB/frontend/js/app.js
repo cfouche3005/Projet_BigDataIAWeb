@@ -527,7 +527,7 @@
 
         try {
           const trees = asArray(await apiRequest(getConfig().endpoints.arbres));
-          
+
           if (trees.length === 0) {
             if (status) {
               status.textContent = 'Aucun arbre disponible pour le clustering.';
@@ -543,7 +543,7 @@
 
           for (const tree of trees) {
             const treeId = getValue(tree, ['id_arbre', 'id']);
-            
+
             try {
               const clusterResult = await apiRequest(getConfig().endpoints.predictions, {
                 method: 'POST',
@@ -559,7 +559,7 @@
 
               const result = clusterResult.result || clusterResult;
               const clusterLabel = result.cluster_label || result.cluster || 0;
-              
+
               clusterMap[treeId] = clusterLabel;
               predictions.push({
                 id_arbre: treeId,
@@ -599,7 +599,7 @@
 
             // Ajouter les nouveaux marqueurs avec les couleurs de cluster
             const referenceMaps = await loadReferences();
-            
+
             trees.forEach((tree) => {
               const lat = Number(getValue(tree, ['latitude']));
               const lng = Number(getValue(tree, ['longitude']));
@@ -639,11 +639,11 @@
           // Afficher la légende
           if (legend) {
             legend.classList.remove('masque');
-            
+
             // Mettre à jour les couleurs dans la légende
             const legendItems = legend.querySelectorAll('.legende-liste li');
             const clusterLabels = ['Petit', 'Moyen', 'Grand'];
-            
+
             legendItems.forEach((item, index) => {
               const cercle = item.querySelector('.cercle-legende');
               if (cercle && clusterLabels[index]) {

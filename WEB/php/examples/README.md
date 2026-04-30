@@ -1,10 +1,10 @@
-# API Usage Examples
+# Exemples d'utilisation de l'API
 
-This directory contains example code and curl commands for using the Tree API.
+Ce répertoire contient des exemples de code et de commandes curl pour utiliser l'API Arbres.
 
-## Quick Test with curl
+## Test rapide avec curl
 
-### Test Height Classification
+### Tester la classification de hauteur
 
 ```bash
 curl -X POST http://localhost/api/predictions \
@@ -19,7 +19,7 @@ curl -X POST http://localhost/api/predictions \
   }'
 ```
 
-### Test Age Prediction
+### Tester la prédiction d'âge
 
 ```bash
 curl -X POST http://localhost/api/predictions \
@@ -32,7 +32,7 @@ curl -X POST http://localhost/api/predictions \
   }'
 ```
 
-### Test Storm Prevention
+### Tester la prévention des tempêtes
 
 ```bash
 curl -X POST http://localhost/api/predictions \
@@ -46,25 +46,25 @@ curl -X POST http://localhost/api/predictions \
   }'
 ```
 
-### Get All Species
+### Obtenir toutes les espèces
 
 ```bash
 curl http://localhost/api/especes
 ```
 
-### Get All Trees
+### Obtenir tous les arbres
 
 ```bash
 curl http://localhost/api/arbres
 ```
 
-### Get a Single Tree
+### Obtenir un arbre unique
 
 ```bash
 curl http://localhost/api/arbres/1
 ```
 
-### Create a New Tree
+### Créer un nouvel arbre
 
 ```bash
 curl -X POST http://localhost/api/arbres \
@@ -80,7 +80,7 @@ curl -X POST http://localhost/api/arbres \
   }'
 ```
 
-### Update a Tree
+### Mettre à jour un arbre
 
 ```bash
 curl -X PATCH http://localhost/api/arbres/1 \
@@ -91,34 +91,34 @@ curl -X PATCH http://localhost/api/arbres/1 \
   }'
 ```
 
-### Delete a Tree
+### Supprimer un arbre
 
 ```bash
 curl -X DELETE http://localhost/api/arbres/1
 ```
 
-## Using the PHP Client
+## Utilisation du client PHP
 
-Include the `APIClient.php` file in your application:
+Incluez le fichier `APIClient.php` dans votre application :
 
 ```php
 require_once 'examples/APIClient.php';
 
 $client = new TreeAPIClient('http://localhost/api');
 
-// Predict height classification
+// Prédire la classification de hauteur
 $result = $client->predictHeightClassification(15, 130, 45, 0.0, 2);
 echo json_encode($result, JSON_PRETTY_PRINT);
 
-// Predict age
+// Prédire l'âge
 $result = $client->predictAge(2.5, 15.0, 45.0);
 echo json_encode($result, JSON_PRETTY_PRINT);
 
-// Get all species
+// Obtenir toutes les espèces
 $species = $client->listEspeces();
 echo json_encode($species, JSON_PRETTY_PRINT);
 
-// Create a tree
+// Créer un arbre
 $tree = $client->createArbre([
     'id_espece' => 1,
     'latitude' => 48.8566,
@@ -128,9 +128,9 @@ $tree = $client->createArbre([
 echo json_encode($tree, JSON_PRETTY_PRINT);
 ```
 
-## Expected Response Formats
+## Formats de réponse attendus
 
-### Successful Prediction
+### Prédiction réussie
 
 ```json
 {
@@ -145,7 +145,7 @@ echo json_encode($tree, JSON_PRETTY_PRINT);
 }
 ```
 
-### Successful Tree Retrieval
+### Récupération d'arbre réussie
 
 ```json
 {
@@ -160,14 +160,14 @@ echo json_encode($tree, JSON_PRETTY_PRINT);
 }
 ```
 
-### Error Response
+### Réponse d'erreur
 
 ```json
 {
   "ok": false,
   "error": {
     "type": "BadRequest",
-    "message": "Missing required field: model"
+    "message": "Champ requis manquant : model"
   }
 }
 ```

@@ -1,89 +1,49 @@
-# Tree API (PHP Implementation)
+# API Arbres (Implémentation PHP)
 
-Full-stack PHP API for the tree database and model predictions.
+API PHP full-stack pour la base de données des arbres et les prédictions des modèles.
 
 ## Installation
 
-### Prerequisites
+### Prérequis
 
 - PHP 7.4+
 - SQLite 3+
-- Python 3.8+ (for the CLI models)
+- Python 3.8+ (pour les modèles CLI)
 
-### Setup Steps
+### Étapes d'installation
 
-1. **Database Setup**
+1. **Configuration de la base de données**
 
-  Create the SQLite database file and tables using the provided schema:
+  Créez le fichier de base de données SQLite et les tables en utilisant le schéma fourni :
 
    ```bash
   mkdir -p ../data
-  sqlite3 ../data/trees.sqlite < /path/to/schema.sql
+  sqlite3 ../data/trees.sqlite < /chemin/vers/schema.sql
    ```
 
-2. **PHP Configuration**
+2. **Configuration PHP**
 
-  Edit `../config.php` (root `WEB/config.php`) or set environment variables:
+  Modifiez `../config.php` (à la racine `WEB/config.php`) ou définissez des variables d'environnement :
 
    ```bash
   export DB_PATH=/home/cfouche/Documents/Code/Projet_BigDataIAWeb/WEB/data/trees.sqlite
-   export PYTHON_BIN=/path/to/venv/bin/python
+   export PYTHON_BIN=/chemin/vers/venv/bin/python
    ```
 
-3. **Web Server Setup**
+3. **Configuration du serveur web**
 
-  The API router is now at `php/api.php`. You can call it either directly or use server-level rewrites.
+  Le routeur de l'API se trouve dans `php/api.php`. Vous pouvez l'appeler directement.
 
-  **Option A: Direct Calls (Simplest)**
-
-  Call endpoints directly on `php/api.php` with `PATH_INFO`:
+  Appelez les points de terminaison directement sur `php/api.php` avec `PATH_INFO` :
 
    ```bash
    curl http://localhost/php/api.php/arbres
    curl http://localhost/php/api.php/predictions
    ```
 
-  **Option B: Apache VirtualHost Rewrite**
+4. **Tester l'API**
 
-  Rewrite `/api/` requests to `php/api.php` in your VirtualHost:
-
-   ```apache
-   <VirtualHost *:80>
-       ServerName yourdomain.com
-       DocumentRoot /var/www/yourdomain/WEB
-
-       <Directory /var/www/yourdomain/WEB>
-           RewriteEngine On
-           RewriteCond %{REQUEST_FILENAME} !-f
-           RewriteCond %{REQUEST_FILENAME} !-d
-           RewriteRule ^api/(.*)$ php/api.php [QSA,L]
-       </Directory>
-   </VirtualHost>
-   ```
-
-  Then call with the `/api/` path:
-
-   ```bash
-   curl http://localhost/api/arbres
-   ```
-
-  **Option C: Nginx**
-
-   ```nginx
-   server {
-       listen 80;
-       server_name yourdomain.com;
-       root /var/www/yourdomain/WEB;
-
-       location /api {
-           rewrite ^/api/(.*)$ /php/api.php last;
-       }
-   }
-   ```
-
-4. **Test the API**
-
-   Direct call (no rewrite needed):
+   Appel direct :
 
    ```bash
    curl -X POST http://localhost/php/api.php/predictions \
@@ -98,17 +58,17 @@ Full-stack PHP API for the tree database and model predictions.
      }'
    ```
 
-## API Endpoints
+## Points de terminaison de l'API
 
-All endpoints are accessible at `/php/api.php/{endpoint}` (direct call) or `/api/{endpoint}` (if server rewrites configured).
+Tous les points de terminaison sont accessibles à l'adresse `/php/api.php/{endpoint}`.
 
-### Predictions
+### Prédictions
 
-**POST /php/api.php/predictions** (or `/api/predictions` with rewrite)
+**POST /php/api.php/predictions**
 
-Run a model prediction. Returns the model output wrapped in a response object.
+Exécute une prédiction de modèle. Renvoie la sortie du modèle encapsulée dans un objet de réponse.
 
-**Example:**
+**Exemple :**
 
 ```bash
 curl -X POST http://localhost/php/api.php/predictions \
@@ -121,7 +81,7 @@ curl -X POST http://localhost/php/api.php/predictions \
   }'
 ```
 
-**Response:**
+**Réponse :**
 
 ```json
 {
@@ -137,21 +97,21 @@ curl -X POST http://localhost/php/api.php/predictions \
 }
 ```
 
-### Trees
+### Arbres
 
-**GET /php/api.php/arbres** (or `/api/arbres` with rewrite)
+**GET /php/api.php/arbres**
 
-List all trees.
+Lister tous les arbres.
 
-**GET /php/api.php/arbres/{id_arbre}** (or `/api/arbres/{id_arbre}` with rewrite)
+**GET /php/api.php/arbres/{id_arbre}**
 
-Get a tree by ID.
+Obtenir un arbre par ID.
 
-**POST /php/api.php/arbres** (or `/api/arbres` with rewrite)
+**POST /php/api.php/arbres**
 
-Create a new tree record.
+Créer un nouvel enregistrement d'arbre.
 
-**Example:**
+**Exemple :**
 
 ```bash
 curl -X POST http://localhost/php/api.php/arbres \
@@ -167,127 +127,125 @@ curl -X POST http://localhost/php/api.php/arbres \
   }'
 ```
 
-**PATCH /php/api.php/arbres/{id_arbre}** (or `/api/arbres/{id_arbre}` with rewrite)
+**PATCH /php/api.php/arbres/{id_arbre}**
 
-Update a tree record.
+Mettre à jour un enregistrement d'arbre.
 
-**DELETE /php/api.php/arbres/{id_arbre}** (or `/api/arbres/{id_arbre}` with rewrite)
+**DELETE /php/api.php/arbres/{id_arbre}**
 
-Delete a tree record.
+Supprimer un enregistrement d'arbre.
 
-### Reference Data
+### Données de référence
 
-**GET /php/api.php/especes** (or `/api/especes` with rewrite)
+**GET /php/api.php/especes**
 
-List all species.
+Lister toutes les espèces.
 
-**GET /php/api.php/especes/{id_espece}** (or `/api/especes/{id_espece}` with rewrite)
+**GET /php/api.php/especes/{id_espece}**
 
-Get a species by ID.
+Obtenir une espèce par ID.
 
-**GET /php/api.php/etats** (or `/api/etats` with rewrite)
+**GET /php/api.php/etats**
 
-List all tree states.
+Lister tous les états d'arbres.
 
-**GET /php/api.php/stades-developpement** (or `/api/stades-developpement` with rewrite)
+**GET /php/api.php/stades-developpement**
 
-List all development stages.
+Lister tous les stades de développement.
 
-**GET /php/api.php/types-port** (or `/api/types-port` with rewrite)
+**GET /php/api.php/types-port**
 
-List all port types.
+Lister tous les types de port.
 
-**GET /php/api.php/types-pied** (or `/api/types-pied` with rewrite)
+**GET /php/api.php/types-pied**
 
-List all pied types.
+Lister tous les types de pied.
 
-## File Structure
+## Structure des fichiers
 
 ```
 WEB/
-├── .htaccess                          # Apache rewrite entrypoint
-├── config.php                         # Root deployment configuration
+├── .htaccess                          # Point d'entrée de configuration Apache
+├── config.php                         # Configuration de déploiement racine
 ├── php/
-│   ├── api.php                        # Entry point and router
+│   ├── api.php                        # Point d'entrée et routeur
 │   ├── models/
-│   │   └── Database.php               # Database abstraction layer
+│   │   └── Database.php               # Couche d'abstraction de la base de données
 │   ├── controllers/
-│   │   ├── PredictionController.php   # Predictions endpoint
-│   │   ├── ArbreController.php        # Trees CRUD
-│   │   └── ReferenceController.php    # Reference data (lookup tables)
+│   │   ├── PredictionController.php   # Point de terminaison des prédictions
+│   │   ├── ArbreController.php        # CRUD Arbres
+│   │   └── ReferenceController.php    # Données de référence (tables de consultation)
 │   ├── utils/
-│   │   ├── Response.php               # HTTP response helpers
-│   │   └── PythonCLI.php              # Python CLI wrapper
-│   └── README.md                      # This file
+│   │   ├── Response.php               # Utilitaires de réponse HTTP
+│   │   └── PythonCLI.php              # Wrapper CLI Python
+│   └── README.md                      # Ce fichier
 └── python/
-  └── app.py                         # Python CLI entrypoint
+  └── app.py                         # Point d'entrée CLI Python
 ```
 
-## Error Handling
+## Gestion des erreurs
 
-All errors are returned as JSON with the following structure:
+Toutes les erreurs sont renvoyées au format JSON avec la structure suivante :
 
 ```json
 {
   "ok": false,
   "error": {
     "type": "ErrorType",
-    "message": "Human-readable error description"
+    "message": "Description de l'erreur lisible par l'homme"
   }
 }
 ```
 
-Common error codes:
-- `400 Bad Request` - Invalid input or missing required fields
-- `404 Not Found` - Resource not found
-- `500 Internal Server Error` - Server or database error
+Codes d'erreur courants :
+- `400 Bad Request` - Entrée invalide ou champs requis manquants
+- `404 Not Found` - Ressource introuvable
+- `500 Internal Server Error` - Erreur du serveur ou de la base de données
 
-## Database Schema
+## Schéma de base de données
 
-The API expects the following tables to exist:
+L'API s'attend à ce que les tables suivantes existent :
 
-- `especes` - Species reference table
-- `etats` - Tree state reference table
-- `stades_developpement` - Development stage reference table
-- `types_port` - Port type reference table
-- `types_pied` - Pied type reference table
-- `arbres` - Main tree registry table with foreign keys
+- `especes` - Table de référence des espèces
+- `etats` - Table de référence de l'état de l'arbre
+- `stades_developpement` - Table de référence des stades de développement
+- `types_port` - Table de référence des types de port
+- `types_pied` - Table de référence des types de pied
+- `arbres` - Table principale du registre des arbres avec clés étrangères
 
-See the Swagger specification at `../docs/swagger.json` for the full schema documentation.
+Voir la spécification Swagger à `../docs/swagger.json` pour la documentation complète du schéma.
 
-## Security Notes
+## Notes de sécurité
 
-- This implementation uses parameterized queries to prevent SQL injection.
-- All user input is validated before processing.
-- The Python CLI is invoked via shell execution with proper escaping.
-- Consider adding authentication/authorization in production.
-- Use HTTPS in production environments.
+- Cette implémentation utilise des requêtes paramétrées pour empêcher les injections SQL.
+- Toutes les entrées utilisateur sont validées avant traitement.
+- La CLI Python est invoquée via l'exécution shell avec un échappement approprié.
+- Envisagez d'ajouter une authentification/autorisation en production.
+- Utilisez HTTPS dans les environnements de production.
 
-## Troubleshooting
+## Dépannage
 
-### Python CLI Not Found
+### CLI Python introuvable
 
-Ensure `PYTHON_BIN` and `DB_PATH` environment variables or configuration point to the correct paths:
+Assurez-vous que les variables d'environnement `PYTHON_BIN` et `DB_PATH` ou la configuration pointent vers les chemins corrects :
 
 ```bash
 export PYTHON_BIN=/home/cfouche/Documents/Code/Projet_BigDataIAWeb/.venv/bin/python
 export DB_PATH=/home/cfouche/Documents/Code/Projet_BigDataIAWeb/WEB/data/trees.sqlite
 ```
 
-### Database Connection Failed
+### Échec de la connexion à la base de données
 
-Verify the SQLite file exists and is writable:
+Vérifiez que le fichier SQLite existe et est accessible en écriture :
 
 ```bash
 ls -l /home/cfouche/Documents/Code/Projet_BigDataIAWeb/WEB/data/trees.sqlite
 ```
 
-### 404 Errors
+### Erreurs 404
 
-Ensure your web server is correctly routing requests to `php/api.php`. Test with direct calls:
+Assurez-vous que votre serveur web route correctement les requêtes vers `php/api.php`. Testez avec des appels directs :
 
 ```bash
 curl http://localhost/php/api.php/arbres
 ```
-
-If using server rewrites, verify the rewrite rules are active and PATH_INFO is enabled.
