@@ -10,6 +10,10 @@ Ce dossier contient l'intégralité du code source de l'interface utilisateur et
 - `python/` : Contient l'interface en ligne de commande (CLI) Python faisant le lien avec l'IA. 👉 [Voir la documentation Python](python/README.md)
 - `Dockerfile` & `docker-compose.yml` : Configuration Docker pour le déploiement.
 
+## Configuration
+
+Avant de lancer l'application, n'oubliez pas de vérifier le fichier `frontend/js/config.js` afin d'y configurer votre clé d'API (API key).
+
 ## Déploiement
 
 Pour déployer le projet depuis ce dossier, exécutez la commande suivante :
