@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bigdata_ia_web
+    ports:
+      - "3000:80"
+    environment:
+      - PYTHON_BIN=/opt/venv/bin/python3
+      - DB_PATH=/var/www/html/WEB/data/trees.sqlite
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+      - app_data:/var/www/html/WEB/data
+      - app_logs:/var/www/html/WEB/logs
+
+volumes:
+  app_data:
+  app_logs:

@@ -1,5 +1,5 @@
 (function (global) {
-  const defaultApiBaseUrl = 'http://localhost:3000/WEB/php/api.php';
+  const defaultApiBaseUrl = '../php/api.php';
 
   global.APP_CONFIG = Object.assign(
     {
