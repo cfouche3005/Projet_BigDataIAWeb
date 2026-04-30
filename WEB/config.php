@@ -5,7 +5,7 @@ define('DB_PATH', getenv('DB_PATH') ?: __DIR__ . '/data/trees.sqlite');
 
 // Python CLI configuration
 define('PYTHON_CLI_PATH', __DIR__ . '/python/app.py');
-define('PYTHON_BIN', getenv('PYTHON_BIN') ?: 'python3');
+define('PYTHON_BIN', getenv('PYTHON_BIN') ?: '/home/cfouche/Documents/Code/Projet_BigDataIAWeb/.venv/bin/python3');
 
 // Error logging configuration
 define('LOG_DIR', __DIR__ . '/logs');

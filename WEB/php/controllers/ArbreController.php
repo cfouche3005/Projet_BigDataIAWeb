@@ -7,6 +7,19 @@ class ArbreController {
 		$this->db = $db;
 	}
 
+	private function normalizeCoordinateValue($value, $field) {
+		if (!is_scalar($value)) {
+			Response::badRequest("Invalid coordinate field: $field");
+		}
+
+		$normalized = trim((string)$value);
+		if ($normalized === '' || !preg_match('/^-?[0-9]+(?:\.[0-9]{1,64})?$/', $normalized)) {
+			Response::badRequest("Invalid coordinate field: $field");
+		}
+
+		return $normalized;
+	}
+
 	public function listArbres() {
 		return $this->db->fetchAll(
 			'SELECT id_arbre, id_espece, id_etat, id_stade, id_port, id_pied, est_remarquable, 
@@ -39,6 +52,9 @@ class ArbreController {
 				Response::badRequest("Missing required field: $field");
 			}
 		}
+
+		$payload['latitude'] = $this->normalizeCoordinateValue($payload['latitude'], 'latitude');
+		$payload['longitude'] = $this->normalizeCoordinateValue($payload['longitude'], 'longitude');
 
 		$fields = ['id_espece', 'id_etat', 'id_stade', 'id_port', 'id_pied', 'est_remarquable', 
 		           'hauteur_totale', 'hauteur_tronc', 'diametre_tronc', 'latitude', 'longitude'];
@@ -80,6 +96,10 @@ class ArbreController {
 
 		foreach ($fields as $field) {
 			if (isset($payload[$field])) {
+				if ($field === 'latitude' || $field === 'longitude') {
+					$payload[$field] = $this->normalizeCoordinateValue($payload[$field], $field);
+				}
+
 				$updates[] = "$field = ?";
 				$values[] = $payload[$field];
 			}

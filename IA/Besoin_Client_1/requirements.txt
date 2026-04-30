@@ -4,3 +4,4 @@ scikit-learn>=1.0.0
 matplotlib
 seaborn
 joblib
+plotly

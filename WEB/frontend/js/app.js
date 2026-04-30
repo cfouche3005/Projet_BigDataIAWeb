@@ -3,6 +3,16 @@
     return window.APP_CONFIG || { apiBaseUrl: '../php/api.php', endpoints: {} };
   }
 
+  function getMapConfig() {
+    const config = getConfig();
+    return config.mapbox || {
+      accessToken: '',
+      style: 'mapbox://styles/mapbox/outdoors-v12',
+      center: [3.287, 49.847],
+      zoom: 14,
+    };
+  }
+
   function joinApiPath(baseUrl, path) {
     const normalizedBase = String(baseUrl || '').replace(/\/+$/, '');
     const normalizedPath = path.startsWith('/') ? path : `/${path}`;
@@ -194,6 +204,29 @@
     return String(value);
   }
 
+  function formatCoordinateValue(value) {
+    if (value === null || value === undefined || value === '') {
+      return '—';
+    }
+
+    return String(value);
+  }
+
+  function isCoordinateValue(value) {
+    return /^-?[0-9]+(?:\.[0-9]{1,64})?$/.test(String(value).trim());
+  }
+
+  function getInputValueAsCoordinateString(form, name) {
+    const element = form.elements.namedItem(name);
+
+    if (!element || element.value.trim() === '') {
+      return null;
+    }
+
+    const value = element.value.trim();
+    return isCoordinateValue(value) ? value : null;
+  }
+
   function getSelectValueAsNumber(form, name) {
     const element = form.elements.namedItem(name);
 
@@ -240,12 +273,20 @@
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
 
+      const latitude = getInputValueAsCoordinateString(form, 'latitude');
+      const longitude = getInputValueAsCoordinateString(form, 'longitude');
+
+      if (latitude === null || longitude === null) {
+        setNotification('La latitude et la longitude doivent contenir au plus 64 décimales.', 'error');
+        return;
+      }
+
       const payload = {
         hauteur_totale: getInputValueAsNumber(form, 'hauteur_totale'),
         hauteur_tronc: getInputValueAsNumber(form, 'hauteur_tronc'),
         diametre_tronc: getInputValueAsNumber(form, 'diametre_tronc'),
-        latitude: getInputValueAsNumber(form, 'latitude'),
-        longitude: getInputValueAsNumber(form, 'longitude'),
+        latitude,
+        longitude,
       };
 
       const espece = getSelectValueAsNumber(form, 'espece');
@@ -277,11 +318,6 @@
 
       if (remarquable && remarquable.value !== '') {
         payload.est_remarquable = remarquable.value === 'true' ? 1 : 0;
-      }
-
-      if (payload.latitude === null || payload.longitude === null) {
-        setNotification('La latitude et la longitude sont obligatoires.', 'error');
-        return;
       }
 
       setLoading(submitButton, true);
@@ -330,8 +366,8 @@
       <td>${formatLabelFromLookup(typePort) || formatTreeValue(getValue(tree, ['id_port']))}</td>
       <td>${formatLabelFromLookup(typePied) || formatTreeValue(getValue(tree, ['id_pied']))}</td>
       <td>${String(getValue(tree, ['est_remarquable'])) === '1' ? 'Oui' : 'Non'}</td>
-      <td>${formatTreeValue(getValue(tree, ['latitude']))}</td>
-      <td>${formatTreeValue(getValue(tree, ['longitude']))}</td>
+      <td>${formatCoordinateValue(getValue(tree, ['latitude']))}</td>
+      <td>${formatCoordinateValue(getValue(tree, ['longitude']))}</td>
       <td>
         <button class="btn-predire-petit" type="button" data-role="predict-age">Prédire</button>
       </td>
@@ -347,7 +383,8 @@
         const prediction = await apiRequest(getConfig().endpoints.predictions, {
           method: 'POST',
           body: {
-            model: 'age_prediction',
+            client: 'age_prediction',
+            gridsearch: true,
             haut_tronc: Number(getValue(tree, ['hauteur_tronc']) || 0),
             haut_tot: Number(getValue(tree, ['hauteur_totale']) || 0),
             tronc_diam: Number(getValue(tree, ['diametre_tronc']) || 0),
@@ -400,6 +437,74 @@
     const status = document.getElementById('carte-api-status');
     const clusterButton = document.getElementById('btn-toggle-cluster');
     const legend = document.getElementById('legende-cluster');
+    const mapConfig = getMapConfig();
+    let map = null; // Declare in outer scope for access in event handler
+
+    if (typeof mapboxgl !== 'undefined' && mapConfig.accessToken) {
+      mapboxgl.accessToken = mapConfig.accessToken;
+
+      map = new mapboxgl.Map({
+        container: 'map',
+        style: mapConfig.style,
+        center: mapConfig.center,
+        zoom: mapConfig.zoom,
+      });
+
+      map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+      map.on('load', async () => {
+        try {
+          const [trees, referenceMaps] = await Promise.all([
+            apiRequest(getConfig().endpoints.arbres),
+            loadReferences(),
+          ]);
+
+          const arbres = asArray(trees);
+
+          arbres.forEach((tree) => {
+            const lat = Number(getValue(tree, ['latitude']));
+            const lng = Number(getValue(tree, ['longitude']));
+
+            if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+              return;
+            }
+
+            const espece = referenceMaps.especes.find((item) => String(getValue(item, ['id_espece', 'id'])) === String(getValue(tree, ['id_espece'])));
+            const etat = referenceMaps.etats.find((item) => String(getValue(item, ['id_etat', 'id'])) === String(getValue(tree, ['id_etat'])));
+            const stade = referenceMaps.stadesDeveloppement.find((item) => String(getValue(item, ['id_stade', 'id'])) === String(getValue(tree, ['id_stade'])));
+
+            const popupHtml = `
+              <div style="font-family: Arial, sans-serif; color: #333; min-width: 220px;">
+                <h4 style="margin: 0 0 8px 0; color: #2b6e44;">Arbre #${formatTreeValue(getValue(tree, ['id_arbre', 'id']))}</h4>
+                <div><strong>Espèce :</strong> ${formatLabelFromLookup(espece) || '—'}</div>
+                <div><strong>État :</strong> ${formatLabelFromLookup(etat) || '—'}</div>
+                <div><strong>Stade :</strong> ${formatLabelFromLookup(stade) || '—'}</div>
+                <div><strong>Hauteur :</strong> ${formatTreeValue(getValue(tree, ['hauteur_totale']))} m</div>
+                <div><strong>Tronc :</strong> ${formatTreeValue(getValue(tree, ['hauteur_tronc']))} m</div>
+                <div><strong>Diamètre :</strong> ${formatTreeValue(getValue(tree, ['diametre_tronc']))} cm</div>
+                <div><strong>Latitude :</strong> ${formatCoordinateValue(getValue(tree, ['latitude']))}</div>
+                <div><strong>Longitude :</strong> ${formatCoordinateValue(getValue(tree, ['longitude']))}</div>
+              </div>
+            `;
+
+            new mapboxgl.Marker({ color: '#000000' })
+              .setLngLat([lng, lat])
+              .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(popupHtml))
+              .addTo(map);
+          });
+
+          if (status) {
+            status.textContent = `${arbres.length} arbre(s) affichés sur la carte.`;
+          }
+        } catch (error) {
+          if (status) {
+            status.textContent = error.message || 'Impossible de charger la carte depuis l’API.';
+          }
+        }
+      });
+    } else if (status) {
+      status.textContent = 'Mapbox n’est pas configuré.';
+    }
 
     try {
       const trees = asArray(await apiRequest(getConfig().endpoints.arbres));
@@ -415,22 +520,147 @@
     if (clusterButton) {
       clusterButton.addEventListener('click', async () => {
         if (status) {
-          status.textContent = 'Chargement des arbres depuis l’API...';
+          status.textContent = 'Calcul des clusters en cours...';
         }
 
+        clusterButton.disabled = true;
+
         try {
-          const clusterArray = asArray(await apiRequest(getConfig().endpoints.arbres));
-          if (status) {
-            status.textContent = `${clusterArray.length} arbre(s) chargés depuis l’API.`;
+          const trees = asArray(await apiRequest(getConfig().endpoints.arbres));
+          
+          if (trees.length === 0) {
+            if (status) {
+              status.textContent = 'Aucun arbre disponible pour le clustering.';
+            }
+            clusterButton.disabled = false;
+            return;
           }
 
+          // Appeler l'API de clustering pour chaque arbre
+          const clusterMap = {};
+          const predictions = [];
+          const numClusters = 3;
+
+          for (const tree of trees) {
+            const treeId = getValue(tree, ['id_arbre', 'id']);
+            
+            try {
+              const clusterResult = await apiRequest(getConfig().endpoints.predictions, {
+                method: 'POST',
+                body: {
+                  model: 'height_classification',
+                  num_clusters: numClusters,
+                  haut_tot: Number(getValue(tree, ['hauteur_totale']) || 0),
+                  tronc_diam: Number(getValue(tree, ['diametre_tronc']) || 0),
+                  age_estim: 0, // default if not available
+                  fk_stadedev_encoded: 0, // default if not available
+                },
+              });
+
+              const result = clusterResult.result || clusterResult;
+              const clusterLabel = result.cluster_label || result.cluster || 0;
+              
+              clusterMap[treeId] = clusterLabel;
+              predictions.push({
+                id_arbre: treeId,
+                cluster: result.cluster || 0,
+                cluster_label: clusterLabel,
+              });
+            } catch (error) {
+              // Si prédiction échoue pour un arbre, utiliser cluster par défaut
+              clusterMap[treeId] = 'Unknown';
+              predictions.push({
+                id_arbre: treeId,
+                cluster: 0,
+                cluster_label: 'Unknown',
+              });
+            }
+          }
+
+          // Compter les clusters et mapper aux couleurs
+          const clusterSizes = {};
+          Object.values(clusterMap).forEach((label) => {
+            clusterSizes[label] = (clusterSizes[label] || 0) + 1;
+          });
+
+          // Couleurs fixes pour les trois clusters (Petit, Moyen, Grand)
+          const clusterColors = {
+            'Petit': '#90EE90',    // Vert
+            'Moyen': '#FFC300',    // Orange
+            'Grand': '#FF5733',    // Rouge
+            'Unknown': '#808080'   // Gris
+          };
+
+          // Mettre à jour les marqueurs sur la carte
+          if (typeof mapboxgl !== 'undefined' && map) {
+            // Supprimer les anciens marqueurs
+            const markers = document.querySelectorAll('.mapboxgl-marker');
+            markers.forEach((m) => m.remove());
+
+            // Ajouter les nouveaux marqueurs avec les couleurs de cluster
+            const referenceMaps = await loadReferences();
+            
+            trees.forEach((tree) => {
+              const lat = Number(getValue(tree, ['latitude']));
+              const lng = Number(getValue(tree, ['longitude']));
+              const treeId = getValue(tree, ['id_arbre', 'id']);
+
+              if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+                return;
+              }
+
+              const clusterLabel = clusterMap[treeId] || 'Unknown';
+              const markerColor = clusterColors[clusterLabel] || '#2b6e44';
+
+              const espece = referenceMaps.especes.find((item) => String(getValue(item, ['id_espece', 'id'])) === String(getValue(tree, ['id_espece'])));
+              const etat = referenceMaps.etats.find((item) => String(getValue(item, ['id_etat', 'id'])) === String(getValue(tree, ['id_etat'])));
+              const stade = referenceMaps.stadesDeveloppement.find((item) => String(getValue(item, ['id_stade', 'id'])) === String(getValue(tree, ['id_stade'])));
+
+              const popupHtml = `
+                <div style="font-family: Arial, sans-serif; color: #333; min-width: 220px;">
+                  <h4 style="margin: 0 0 8px 0; color: #2b6e44;">Arbre #${formatTreeValue(treeId)}</h4>
+                  <div><strong>Cluster :</strong> ${clusterLabel}</div>
+                  <div><strong>Espèce :</strong> ${formatLabelFromLookup(espece) || '—'}</div>
+                  <div><strong>État :</strong> ${formatLabelFromLookup(etat) || '—'}</div>
+                  <div><strong>Stade :</strong> ${formatLabelFromLookup(stade) || '—'}</div>
+                  <div><strong>Hauteur :</strong> ${formatTreeValue(getValue(tree, ['hauteur_totale']))} m</div>
+                  <div><strong>Tronc :</strong> ${formatTreeValue(getValue(tree, ['hauteur_tronc']))} m</div>
+                  <div><strong>Diamètre :</strong> ${formatTreeValue(getValue(tree, ['diametre_tronc']))} cm</div>
+                </div>
+              `;
+
+              new mapboxgl.Marker({ color: markerColor })
+                .setLngLat([lng, lat])
+                .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(popupHtml))
+                .addTo(map);
+            });
+          }
+
+          // Afficher la légende
           if (legend) {
             legend.classList.remove('masque');
+            
+            // Mettre à jour les couleurs dans la légende
+            const legendItems = legend.querySelectorAll('.legende-liste li');
+            const clusterLabels = ['Petit', 'Moyen', 'Grand'];
+            
+            legendItems.forEach((item, index) => {
+              const cercle = item.querySelector('.cercle-legende');
+              if (cercle && clusterLabels[index]) {
+                cercle.style.backgroundColor = clusterColors[clusterLabels[index]];
+              }
+            });
+          }
+
+          if (status) {
+            status.textContent = `Clustering réalisé : ${Object.keys(clusterSizes).length} cluster(s) identifié(s).`;
           }
         } catch (error) {
           if (status) {
-            status.textContent = error.message || 'Impossible de charger les arbres depuis l’API.';
+            status.textContent = error.message || 'Impossible de calculer les clusters.';
           }
+        } finally {
+          clusterButton.disabled = false;
         }
       });
     }
